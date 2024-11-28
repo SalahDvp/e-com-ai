@@ -4,7 +4,7 @@ import * as React from "react"
 import { ChevronDownIcon, InfoIcon, CheckIcon, AlertTriangleIcon, X, Download } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { motion, AnimatePresence } from "framer-motion"
-import * as XLSX from 'xlsx'
+//import * as XLSX from 'xlsx'
 
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -110,7 +110,7 @@ export default function Component() {
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1))
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 0))
 
-  const exportToExcel = (message: SentMessage) => {
+  /*const exportToExcel = (message: SentMessage) => {
     const worksheet = XLSX.utils.json_to_sheet([{
       Date: message.date.toLocaleString(),
       Recipients: message.recipients,
@@ -122,6 +122,7 @@ export default function Component() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Campaign")
     XLSX.writeFile(workbook, `campaign_${message.id}.xlsx`)
   }
+  */
 
   const renderStepContent = () => {
     switch (currentStep) {
