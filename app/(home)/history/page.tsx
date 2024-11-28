@@ -100,7 +100,10 @@
    }
    return (
      <section className="w-full py-12">
-       <div className="container px-4 md:px-6 grid gap-8">
+
+      <div className="container mx-auto space-y-8">
+        
+     
          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-8">
            <div className="grid gap-1">
              <h1 className="text-2xl font-bold tracking-tight">History Of Orders</h1>

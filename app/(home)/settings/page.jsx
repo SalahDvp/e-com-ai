@@ -44,9 +44,8 @@
      setKeywords(value)
    }
    return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-
-    <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+    <div className="min-h-screen bg-background p-8">
+      <div className="container mx-auto space-y-8">
     
        <main className="flex-1 px-4 py-6 sm:px-6 sm:py-8">
          <div className="grid gap-8">
