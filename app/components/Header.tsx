@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
-import { CircleUser, Package2, Home, MessageSquare, Target, Package, Settings, ChevronRight,TimerIcon,CreditCard } from 'lucide-react'
+import { motion, AnimatePresence } from "framer-motion"
+import { CircleUser, Package2, Home, MessageSquare, Target, Package, Settings, ChevronRight, TimerIcon, CreditCard } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -110,6 +110,52 @@ const AILabel = () => {
   )
 }
 
+const NavItem = ({ item, isActive, isExpanded }) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Link
+          href={item.href}
+          className={`relative flex h-10 items-center justify-start rounded-xl transition-all duration-300 ease-in-out ${
+            isExpanded ? "w-full px-3" : "w-10 justify-center"
+          } ${
+            isActive
+              ? "text-primary bg-primary/10"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+          }`}
+        >
+          {item.icon === "AI" ? (
+            <AILabel />
+          ) : (
+            <item.icon className={`h-5 w-5 transition-all duration-300 ease-in-out ${
+              isActive ? "scale-110" : ""
+            }`} />
+          )}
+          {isExpanded && (
+            <span className="ml-3">{item.label}</span>
+          )}
+          <span className="sr-only">{item.label}</span>
+          {isActive && (
+            <motion.div
+              className="absolute inset-0 z-[-1] rounded-xl border-2 border-primary"
+              layoutId="active-nav-item"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+            />
+          )}
+        </Link>
+      </TooltipTrigger>
+      {!isExpanded && (
+        <TooltipContent side="right" sideOffset={10}>
+          {item.label}
+        </TooltipContent>
+      )}
+    </Tooltip>
+  )
+}
+
 export default function Header() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
@@ -119,9 +165,9 @@ export default function Header() {
     setMounted(true)
   }, [])
 
-  const toggleSidebar = () => {
-    setIsExpanded(!isExpanded)
-  }
+  const toggleSidebar = useCallback(() => {
+    setIsExpanded((prev) => !prev)
+  }, [])
 
   return (
     <motion.aside 
@@ -139,49 +185,16 @@ export default function Header() {
             <span className="sr-only">Acme Inc</span>
           </Link>
 
-          {navItems.map((item) => (
-            <Tooltip key={item.href}>
-              <TooltipTrigger asChild>
-                <Link
-                  href={item.href}
-                  className={`relative flex h-10 items-center justify-start rounded-xl transition-all duration-300 ease-in-out ${
-                    isExpanded ? "w-full px-3" : "w-10 justify-center"
-                  } ${
-                    pathname === item.href
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  }`}
-                >
-                  {item.icon === "AI" ? (
-                    <AILabel />
-                  ) : (
-                    <item.icon className={`h-5 w-5 transition-all duration-300 ease-in-out ${
-                      pathname === item.href ? "scale-110" : ""
-                    }`} />
-                  )}
-                  {isExpanded && (
-                    <span className="ml-3">{item.label}</span>
-                  )}
-                  <span className="sr-only">{item.label}</span>
-                  {pathname === item.href && mounted && (
-                    <motion.div
-                      className="absolute inset-0 z-[-1] rounded-xl border-2 border-primary"
-                      layoutId="active-nav-item"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              </TooltipTrigger>
-              {!isExpanded && (
-                <TooltipContent side="right" sideOffset={10}>
-                  {item.label}
-                </TooltipContent>
-              )}
-            </Tooltip>
-          ))}
+          <AnimatePresence>
+            {navItems.map((item) => (
+              <NavItem
+                key={item.href}
+                item={item}
+                isActive={pathname === item.href}
+                isExpanded={isExpanded}
+              />
+            ))}
+          </AnimatePresence>
         </TooltipProvider>
       </nav>
 
@@ -218,3 +231,4 @@ export default function Header() {
     </motion.aside>
   )
 }
+
