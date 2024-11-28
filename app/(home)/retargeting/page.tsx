@@ -189,7 +189,7 @@ export default function Component() {
             </DialogContent>
           </Dialog>
         </div>
-        <MessageHistory sentMessages={sentMessages} exportToExcel={exportToExcel} />
+        <MessageHistory sentMessages={sentMessages}  />
       </div>
     </div>
   )
@@ -393,7 +393,7 @@ const SendCampaign = () => (
   </motion.div>
 )
 
-const MessageHistory = ({ sentMessages, exportToExcel }: { sentMessages: SentMessage[], exportToExcel: (message: SentMessage) => void }) => (
+const MessageHistory = ({ sentMessages }: { sentMessages: SentMessage[]}) => (
   <Table>
     <TableHeader>
       <TableRow>
@@ -414,10 +414,7 @@ const MessageHistory = ({ sentMessages, exportToExcel }: { sentMessages: SentMes
           <TableCell>{msg.totalCost.toLocaleString()}</TableCell>
           <TableCell className="max-w-xs truncate">{msg.content}</TableCell>
           <TableCell>
-            <Button onClick={() => exportToExcel(msg)} size="sm">
-              <Download className="mr-2 h-4 w-4" />
-              Export
-            </Button>
+           
           </TableCell>
         </TableRow>
       ))}
